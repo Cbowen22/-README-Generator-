@@ -1,61 +1,53 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
-const generateMarkdown = require('./utils/generateMarkdown');
-const questions = [
-    {
-        type: 'input',
-        name: 'title',
-        message: 'What is the name of your project?',
-    },
-     {
-        type: 'input',
-        name: 'description',
-        message: 'Provide a description of you project.',
+inquirer .prompt([
+ {
+    type:'input',
+    name:'Titel',
+    message:'What is your project name?'
     },
     {
-        type: 'input',
-        name: 'installation',
-        message: 'What command should be run to install dependencies?',
-        default: 'npm i',
+    type: 'checkbox',
+    message: 'What license would you like?',
+    name: 'license',
+    choices:['Artistic license 2.0', 'MIT','BSD 3-clause "New" or "Revised" license','Boost Software License 1.0'],
     },
-    {
-        type: 'input',
-        name: 'test',
-        message: 'What command should be used to run tests?',
-        default: 'npm test',
-    },
-    {
-        type: 'input',
-        name: 'usage',
-        message: 'What does the user need to know about using the repo?',
-    },
-    {
-        type: 'list',
-        name: 'license',
-        message: 'What type of license is assigned to this project?',
-        choices: ['None', 'Apache 2.0 License', 'MIT License', 'Mozilla Public License 2.0', 'The Unlicense'],
-    },
-    {
-        type: 'input',
-        name: 'contributing',
-        message: 'What does the user need to know about contributing to the project?',
-    },
-    {
-        type: 'input',
-        name: 'userName',
-        message: 'What is your github user name?',
-    },
-    {
-        type: 'input',
-        name: 'email',
-        message: 'What is your email address?',
-    },  
-];
-inquirer
-    .prompt(questions)
-    .then((answers) => {
-        const readMeContent = generateMarkdown(answers);
-        fs.writeFile('./Output/README.md', readMeContent, (err) =>
-          err ? console.log(err) : console.log('Successfully created README.md! Check the Output folder!')
-        );
-      });
+{}, 
+{
+    type: 'input',
+    message: 'What is your Github User name?',
+    name:'Githubusername',
+},
+{
+    type: 'input',
+    message:'What is your email address?',
+    name: 'Email '
+},
+]);
+const genReadme = ({Titel, license, Githubusername, Email}) => 
+`
+### Readme -- ${Titel}                       ${license}
+## Desription 
+Intro, here's a brife into to the project, talking about all 
+the details about this project 
+## Installation
+Here we can describe the different node packages that a project might 
+need in order to run. Like Inqirer or Jest for testing code. 
+## Usage 
+Here's were we can put all the info about the use cases for this 
+project can be outlined. 
+## Contubtors and tests 
+here's were you can list all the the different people 
+that help with the project 
+## Contact Info 
+Email ${Email} 
+Github User Name ${Githubusername}
+`
+genReadme();
+.then ((answers) => {
+    const contentReadme = genReadme(answers);
+    fs.writeFile('README.md', contentReadme)
+})
+function writeToFile(fileName, data) {}
+function init() {}
+init();
